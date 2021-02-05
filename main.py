@@ -24,8 +24,7 @@ class App:
         monitor.run()
         logger.info(f'vdq监视器已启动')
         downloader = Downloader()
-        while 1:
-            downloader.run()
+        downloader.run()
 
 
 if __name__ == '__main__':

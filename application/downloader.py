@@ -9,13 +9,14 @@ from application.ext import session
 from application.models import Video
 from config import (
     local_videos_dir, local_videos4test_dir,
-    logger, USER_NAME, TOKEN, VIDEOS_SYNC_ROOT_URI
+    logger, USER_NAME, TOKEN, VIDEOS_SYNC_ROOT_URI, SLEEP_TIME
 )
 
 
 class Downloader:
 
     def get_videos2download(self):
+        print(f'==============查询待下载视频======{datetime.now()}=============')
         videos = session.query(Video).filter(
             Video.is_deleted == 0,
             Video.status.in_([3, 31])
@@ -24,13 +25,17 @@ class Downloader:
 
     @staticmethod
     def sleep(t):
+        print(f'无待下载视频，程序休眠。。。')
         for i in range(t):
-            print(f'暂停剩余{t - i}秒')
+            print(f'休眠剩余{t - i}秒')
             time.sleep(1)
 
     def run(self):
-        videos2d = self.get_videos2download()
-        while videos2d:
+        while 1:
+            videos2d = self.get_videos2download()
+            if not videos2d:
+                self.sleep(SLEEP_TIME)
+                continue
             for video in videos2d:
                 if video.for_test:
                     video_dir = local_videos4test_dir
@@ -40,7 +45,8 @@ class Downloader:
                 local_path = os.path.join(video_dir, f'{video.vid}.{video.format}')
                 if not os.path.exists(local_path) or int(os.path.getsize(local_path)) < int(video.size):
                     self.download(video, local_path=local_path)
-            # self.sleep(60)
+                else:
+                    self.update_status_32(video)
 
     def download(self, video, local_path):
         desc = f'{video.vid}.{video.format}'
@@ -66,10 +72,7 @@ class Downloader:
         qs = dict(
             user_name=USER_NAME
         )
-        self.status_sync(video=video, status=31)
-        video.sync_start_time = datetime.now()
-        video.status = 31
-        session.commit()
+        self.update_status_31(video=video)
         try:
             r = requests.get(url=video_sync_api, params=qs, headers=headers, stream=True)
             pbar = tqdm(
@@ -86,12 +89,7 @@ class Downloader:
                     # 手动更新的大小
                     pbar.update(chunk_size)
             pbar.close()
-            self.status_sync(video=video, status=32)
-            video.sync_finish_time = datetime.now()
-            video.delete_time = datetime.now()
-            video.status = 32
-            video.is_deleted = 1
-            session.commit()
+            self.update_status_32(video=video)
             logger.info(f'视频{local_path}已下载')
 
         except Exception as e:
@@ -133,6 +131,20 @@ class Downloader:
             logger.info(r.json().get('msg'))
         else:
             logger.error(r.json().get('msg'))
+
+    def update_status_31(self, video):
+        self.status_sync(video=video, status=31)
+        video.sync_start_time = datetime.now()
+        video.status = 31
+        session.commit()
+
+    def update_status_32(self, video):
+        self.status_sync(video=video, status=32)
+        video.sync_finish_time = datetime.now()
+        video.delete_time = datetime.now()
+        video.status = 32
+        video.is_deleted = 1
+        session.commit()
 
 
 if __name__ == '__main__':
