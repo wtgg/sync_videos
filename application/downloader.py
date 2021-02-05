@@ -88,6 +88,7 @@ class Downloader:
             pbar.close()
             self.status_sync(video=video, status=32)
             video.sync_finish_time = datetime.now()
+            video.delete_time = datetime.now()
             video.status = 32
             video.is_deleted = 1
             session.commit()
