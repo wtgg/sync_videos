@@ -7,7 +7,10 @@ from tqdm import tqdm
 
 from application.ext import session
 from application.models import Video
-from config import local_videos_dir, local_videos4test_dir, logger, USER_NAME, TOKEN, VIDEOS_SYNC_ROOT_URI
+from config import (
+    local_videos_dir, local_videos4test_dir,
+    logger, USER_NAME, TOKEN, VIDEOS_SYNC_ROOT_URI
+)
 
 
 class Downloader:
@@ -52,8 +55,7 @@ class Downloader:
                 msg = f'视频{local_path}本地大小超过视频size'
                 logger.error(msg)
         if video.for_test:
-            # video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/toB/video_sync/{video.vid}'
-            video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/toB/video_sync/{video.vid}'
+            video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/toB/video_sync/{video.vid}'
         else:
             video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/toB/video_sync/{video.vid}'
         headers = dict(
@@ -98,8 +100,7 @@ class Downloader:
 
     def status_sync(self, video, status):
         if video.for_test:
-            # status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/toB/status_sync/v_{video.vid}/status/{status}'
-            status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/toB/status_sync/v_{video.vid}/status/{status}'
+            status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/toB/status_sync/v_{video.vid}/status/{status}'
         else:
             status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/toB/status_sync/v_{video.vid}/status/{status}'
         headers = dict(
@@ -116,8 +117,7 @@ class Downloader:
 
     def report_sync_error(self, video, error):
         if video.for_test:
-            # api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/report/toB/video_sync_error/{video.vid}'
-            api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/report/toB/video_sync_error/{video.vid}'
+            api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/report/toB/video_sync_error/{video.vid}'
         else:
             api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/report/toB/video_sync_error/{video.vid}'
         headers = dict(

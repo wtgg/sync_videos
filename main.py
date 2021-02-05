@@ -1,6 +1,7 @@
 import os
 
-config_file_path = os.path.join(os.path.basename(__file__), 'config.py')
+config_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.py')
+
 if not os.path.exists(config_file_path):
     print('配置文件config.py缺失，请联系开发者。。。')
     exit()
@@ -14,6 +15,7 @@ from application.downloader import Downloader
 class App:
 
     @classmethod
+    @logger.catch()
     def run(cls):
         for dir in dirs:
             if not os.path.exists(dir):

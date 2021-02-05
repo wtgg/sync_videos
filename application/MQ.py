@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 from application.ext import RabbitMQ_channel, async
-from config import 国恒信创采集MQ, logger
+from config import 国恒信创采集MQ
 
 
 class Pro:
