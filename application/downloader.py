@@ -61,9 +61,10 @@ class Downloader:
                 msg = f'视频{local_path}本地大小超过视频size'
                 logger.error(msg)
         if video.for_test:
-            video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/toB/video_sync/{video.vid}'
+            port = 7000
         else:
-            video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/toB/video_sync/{video.vid}'
+            port = 8000
+        video_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:{port}/api/toB/video_sync/{video.vid}'
         headers = dict(
             Range=f'{start_size}-{video.size}',
             token=TOKEN,
@@ -99,9 +100,10 @@ class Downloader:
 
     def status_sync(self, video, status):
         if video.for_test:
-            status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/toB/status_sync/v_{video.vid}/status/{status}'
+            port = 7000
         else:
-            status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/toB/status_sync/v_{video.vid}/status/{status}'
+            port = 8000
+        status_sync_api = f'{VIDEOS_SYNC_ROOT_URI}:{port}/api/toB/status_sync/v_{video.vid}/status/{status}'
         headers = dict(
             token=TOKEN,
         )
@@ -116,9 +118,10 @@ class Downloader:
 
     def report_sync_error(self, video, error):
         if video.for_test:
-            api = f'{VIDEOS_SYNC_ROOT_URI}:7000/api/report/toB/video_sync_error/{video.vid}'
+            port = 7000
         else:
-            api = f'{VIDEOS_SYNC_ROOT_URI}:8000/api/report/toB/video_sync_error/{video.vid}'
+            port = 8000
+        api = f'{VIDEOS_SYNC_ROOT_URI}:{port}/api/report/toB/video_sync_error/{video.vid}'
         headers = dict(
             token=TOKEN,
         )
