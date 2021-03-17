@@ -1,4 +1,5 @@
 import os
+from multiprocessing import Process
 
 config_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.py')
 
@@ -21,10 +22,14 @@ class App:
             if not os.path.exists(dir):
                 os.makedirs(dir)
         monitor = MQ_C(国恒信创采集MQ.config)
-        monitor.run()
-        logger.info(f'vdq监视器已启动')
         downloader = Downloader()
-        downloader.run()
+        monitor_p = Process(target=monitor.run)
+        downloader_p = Process(target=downloader.run)
+        downloader_p.daemon = True
+        monitor_p.start()
+        logger.info(f'vdq监视器已启动')
+        downloader_p.start()
+        logger.info(f'vdq下载器已启动')
 
 
 if __name__ == '__main__':

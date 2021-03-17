@@ -3,7 +3,7 @@ from datetime import datetime
 
 import pika
 
-from application.ext import RabbitMQ_channel, async
+from application.ext import RabbitMQ_channel
 from config import 国恒信创采集MQ
 
 
@@ -35,11 +35,9 @@ class Cus:
         # ch.basic_ack(delivery_tag=method.delivery_tag)
         data = json.loads(body.decode())
         print(data)
-        print(type(data))
         print(f'==========={datetime.now()}============')
         print()
 
-    @async
     def run(self):
         self.channel.queue_declare(queue=self.queue, durable=True)
         self.channel.basic_consume(
