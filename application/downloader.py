@@ -30,6 +30,7 @@ class Downloader:
             print(f'休眠剩余{t - i}秒')
             time.sleep(1)
 
+    # @logger.catch()
     def run(self):
         while 1:
             videos2d = self.get_videos2download()
@@ -110,10 +111,12 @@ class Downloader:
         data = dict(
             user_name=USER_NAME
         )
+        logger.warning(f'status_sync_api:{status_sync_api}')
         r = requests.put(url=status_sync_api, data=data, headers=headers)
         if r.status_code == 200:
             logger.info(r.json().get('msg'))
         else:
+            print(f'--------r.text:{r.text}')
             logger.error(r.json().get('msg'))
 
     def report_sync_error(self, video, error):

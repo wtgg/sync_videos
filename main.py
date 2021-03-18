@@ -23,12 +23,9 @@ class App:
                 os.makedirs(dir)
         monitor = MQ_C(国恒信创采集MQ.config)
         downloader = Downloader()
-        monitor_p = Process(target=monitor.run)
-        downloader_p = Process(target=downloader.run)
-        downloader_p.daemon = True
-        monitor_p.start()
+        monitor.run()
         logger.info(f'vdq监视器已启动')
-        downloader_p.start()
+        downloader.run()
         logger.info(f'vdq下载器已启动')
 
 

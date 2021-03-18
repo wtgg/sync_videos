@@ -40,7 +40,7 @@ def RabbitMQ_channel(RabbitMQconfig):
     return channel
 
 
-def GetInsertOrUpdateObj(cls, data, filter_dict):
+def upsert(cls, data, filter_dict):
     '''
     cls:            Model 类名
     strFilter:      filter的参数.eg:"name='name-14'"
