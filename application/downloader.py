@@ -77,6 +77,10 @@ class Downloader:
         self.update_status_31(video=video)
         try:
             r = requests.get(url=video_sync_api, params=qs, headers=headers, stream=True)
+            if r.status_code != 200:
+                logger.warning(r.text)
+                self.update_status_34(video=video)
+                return
             pbar = tqdm(
                 total=int(video.size),
                 initial=start_size,
@@ -137,6 +141,12 @@ class Downloader:
             logger.info(r.json().get('msg'))
         else:
             logger.error(r.json().get('msg'))
+
+    def update_status_34(self, video):
+        self.status_sync(video=video, status=34)
+        video.sync_start_time = None
+        video.status = 34
+        session.commit()
 
     def update_status_31(self, video):
         self.status_sync(video=video, status=31)
