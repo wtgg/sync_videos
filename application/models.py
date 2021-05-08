@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, func
+from sqlalchemy import Column, String, Integer, DateTime, func, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -18,6 +18,7 @@ class Video(Base):
     sync_finish_time = Column(DateTime, index=True)
     is_deleted = Column(Integer, index=True, default=0)  # 0或1
     delete_time = Column(DateTime, index=True)
+    error_msg = Column(Text)
 
 
 if __name__ == '__main__':

@@ -19,10 +19,10 @@ class MQ_C(Cus):
 
     @staticmethod
     def callback(ch, method, properties, body):
-        print(1112222223333333)
-        print(body.decode())
+        # print(1112222223333333)
+        # print(body.decode())
         d = json.loads(body.decode())
-        print(66666666)
+        # print(66666666)
         vid = int(d.pop('id'))
         data = {}
         data['vid'] = vid
