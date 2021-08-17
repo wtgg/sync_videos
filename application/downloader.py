@@ -36,18 +36,18 @@ class Downloader:
             videos2d = self.get_videos2download()
             if not videos2d:
                 self.sleep(SLEEP_TIME)
-                continue
-            for video in videos2d:
-                if video.for_test:
-                    video_dir = local_videos4test_dir
-                else:
-                    video_dir = local_videos_dir
+            else:
+                for video in videos2d:
+                    if video.for_test:
+                        video_dir = local_videos4test_dir
+                    else:
+                        video_dir = local_videos_dir
 
-                local_path = os.path.join(video_dir, f'{video.vid}.{video.format}')
-                if not os.path.exists(local_path) or int(os.path.getsize(local_path)) < int(video.size):
-                    self.download(video, local_path=local_path)
-                else:
-                    self.update_status_32(video)
+                    local_path = os.path.join(video_dir, f'{video.vid}.{video.format}')
+                    if not os.path.exists(local_path) or int(os.path.getsize(local_path)) < int(video.size):
+                        self.download(video, local_path=local_path)
+                    else:
+                        self.update_status_32(video)
 
     def download(self, video, local_path):
         desc = f'{video.vid}.{video.format}'
