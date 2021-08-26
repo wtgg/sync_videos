@@ -45,9 +45,15 @@ class Downloader:
 
                     local_path = os.path.join(video_dir, f'{video.vid}.{video.format}')
                     if not os.path.exists(local_path) or int(os.path.getsize(local_path)) < int(video.size):
-                        self.download(video, local_path=local_path)
+                        try:
+                            self.download(video, local_path=local_path)
+                        except Exception as e:
+                            logger.warning(f"下载报错: {e}\n可能服务器端重启，请稍后。。。")
                     else:
-                        self.update_status_32(video)
+                        try:
+                            self.update_status_32(video)
+                        except Exception as e:
+                            logger.warning(f"更新状态报错: {e}\n可能服务器端重启，请稍后。。。")
 
     def download(self, video, local_path):
         desc = f'{video.vid}.{video.format}'
