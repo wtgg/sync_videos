@@ -6,12 +6,6 @@ from application.models import Video
 from config import logger, 国恒信创采集MQ
 
 
-class App:
-
-    def run(self):
-        pass
-
-
 class MQ_C(Cus):
 
     def __init__(self, *args):

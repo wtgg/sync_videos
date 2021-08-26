@@ -8,7 +8,7 @@ if not os.path.exists(config_file_path):
 else:
     from config import 国恒信创采集MQ, dirs, logger
 
-from application.app import MQ_C
+from application.monitor import MQ_C
 from application.downloader import Downloader
 
 
